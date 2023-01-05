@@ -67,7 +67,7 @@ jobs:
           done
 
   sanity-check:
-    if: github.repository == 'apache/incubator-seatunnel'
+    if: github.repository == 'cason0126/incubator-seatunnel'
     name: Sanity check results
     needs: [ license-header, code-style, dead-link ]
     runs-on: ubuntu-latest
