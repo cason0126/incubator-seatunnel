@@ -316,8 +316,8 @@ jobs:
           MAVEN_OPTS: -Xmx2048m
 
   integration-test:
-    needs: [ changes, sanity-check ]
-    if: needs.changes.outputs.api == 'true' || (needs.changes.outputs.api == 'false' && needs.changes.outputs.it-modules != '')
+   #  needs: [ changes, sanity-check ]
+   #  if: needs.changes.outputs.api == 'true' || (needs.changes.outputs.api == 'false' && needs.changes.outputs.it-modules != '')
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
