@@ -82,7 +82,7 @@ jobs:
   changes:
     runs-on: ubuntu-latest
     # To prevent error when there's no base branch
-    if: github.repository == 'apache/incubator-seatunnel'
+    if: github.repository == 'cason0126/incubator-seatunnel'
     timeout-minutes: 10
     outputs:
       api: ${{ steps.filter.outputs.api }}
@@ -316,8 +316,8 @@ jobs:
           MAVEN_OPTS: -Xmx2048m
 
   integration-test:
-   #  needs: [ changes, sanity-check ]
-   #  if: needs.changes.outputs.api == 'true' || (needs.changes.outputs.api == 'false' && needs.changes.outputs.it-modules != '')
+    needs: [ changes, sanity-check ]
+    if: needs.changes.outputs.api == 'true' || (needs.changes.outputs.api == 'false' && needs.changes.outputs.it-modules != '')
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
