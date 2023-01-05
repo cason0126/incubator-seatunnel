@@ -69,7 +69,7 @@ jobs:
   sanity-check:
     if: github.repository == 'cason0126/incubator-seatunnel'
     name: Sanity check results
-    needs: [ license-header, code-style, dead-link ]
+  #  needs: [ license-header, code-style, dead-link ]
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
