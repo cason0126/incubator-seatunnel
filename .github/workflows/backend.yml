@@ -333,14 +333,14 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
       - name: run all modules integration test
-    #    if: needs.changes.outputs.api == 'true'
+        if: needs.changes.outputs.api == 'true'
         run: |
           ./mvnw -T 1C -B verify -DskipUT=true -DskipIT=false -D"checkstyle.skip"=true -D"license.skipAddThirdParty"=true --no-snapshot-updates
         env:
           MAVEN_OPTS: -Xmx2048m
 
       - name: run updated modules integration test
-        if: needs.changes.outputs.api == 'false' && needs.changes.outputs.it-modules != ''
+    #    if: needs.changes.outputs.api == 'false' && needs.changes.outputs.it-modules != ''
         run: |
           ./mvnw -T 1C -B verify -DskipUT=true -DskipIT=false -D"checkstyle.skip"=true -D"license.skipAddThirdParty"=true --no-snapshot-updates -pl :connector-cassandra-e2e -am -Pci
         env:
