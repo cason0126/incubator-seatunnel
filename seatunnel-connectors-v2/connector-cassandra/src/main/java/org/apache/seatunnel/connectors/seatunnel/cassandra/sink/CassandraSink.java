@@ -17,14 +17,9 @@
 
 package org.apache.seatunnel.connectors.seatunnel.cassandra.sink;
 
-import static org.apache.seatunnel.connectors.seatunnel.cassandra.config.CassandraConfig.CQL;
-import static org.apache.seatunnel.connectors.seatunnel.cassandra.config.CassandraConfig.DATACENTER;
-import static org.apache.seatunnel.connectors.seatunnel.cassandra.config.CassandraConfig.FIELDS;
 import static org.apache.seatunnel.connectors.seatunnel.cassandra.config.CassandraConfig.HOST;
 import static org.apache.seatunnel.connectors.seatunnel.cassandra.config.CassandraConfig.KEYSPACE;
-import static org.apache.seatunnel.connectors.seatunnel.cassandra.config.CassandraConfig.PASSWORD;
 import static org.apache.seatunnel.connectors.seatunnel.cassandra.config.CassandraConfig.TABLE;
-import static org.apache.seatunnel.connectors.seatunnel.cassandra.config.CassandraConfig.USERNAME;
 
 import org.apache.seatunnel.api.common.PrepareFailException;
 import org.apache.seatunnel.api.common.SeaTunnelAPIErrorCode;
