@@ -74,7 +74,10 @@ public class CassandraSource extends AbstractSingleSplitSource<SeaTunnelRow> {
                 cassandraParameters.getPassword(),
                 cassandraParameters.getCql()
         ).build()) {
-            Row rs = currentSession.execute(CassandraClient.createSimpleStatement(CQL.key(), cassandraParameters.getConsistencyLevel())).one();
+            Row rs = currentSession.execute(
+                    CassandraClient.createSimpleStatement(CQL.key(), cassandraParameters.getConsistencyLevel()
+                    )
+            ).one();
             if (rs == null) {
                 throw new CassandraConnectorException(CassandraConnectorErrorCode.NO_DATA_IN_SOURCE_TABLE,
                         "No data select from this cql: " + pluginConfig.getString(CQL.key()));
