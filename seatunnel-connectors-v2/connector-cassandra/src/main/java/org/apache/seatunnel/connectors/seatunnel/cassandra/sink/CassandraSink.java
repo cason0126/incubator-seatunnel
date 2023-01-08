@@ -68,21 +68,21 @@ public class CassandraSink extends AbstractSimpleSink<SeaTunnelRow, Void> {
 
     @Override
     public void prepare(Config pluginConfig) throws PrepareFailException {
-        CheckResult checkResult = CheckConfigUtil.checkAllExists(pluginConfig, HOST.key(), KEYSPACE.key(), CQL.key());
+        CheckResult checkResult = CheckConfigUtil.checkAllExists(pluginConfig, HOST.key(), KEYSPACE.key(), TABLE.key());
         if (!checkResult.isSuccess()) {
             throw new CassandraConnectorException(SeaTunnelAPIErrorCode.CONFIG_VALIDATION_FAILED,
                     String.format("PluginName: %s, PluginType: %s, Message: %s",
                             getPluginName(), PluginType.SINK, checkResult.getMsg()));
         }
+        this.cassandraParameters.buildWithConfig(pluginConfig);
         try (CqlSession session = CassandraClient.getCqlSessionBuilder(
-                pluginConfig.getString(HOST.key()),
-                pluginConfig.getString(KEYSPACE.key()),
-                pluginConfig.getString(USERNAME.key()),
-                pluginConfig.getString(PASSWORD.key()),
-                pluginConfig.getString(DATACENTER.key())
+                cassandraParameters.getHost(),
+                cassandraParameters.getKeyspace(),
+                cassandraParameters.getUsername(),
+                cassandraParameters.getPassword(),
+                cassandraParameters.getDatacenter()
         ).build()) {
-            this.cassandraParameters.buildWithConfig(pluginConfig);
-            List<String> fields = pluginConfig.getStringList(FIELDS.key());
+            List<String> fields = cassandraParameters.getFields();
             this.tableSchema = CassandraClient.getTableSchema(session, pluginConfig.getString(TABLE.key()));
             if (fields == null || fields.isEmpty()) {
                 List<String> newFields = new ArrayList<>();
