@@ -92,7 +92,7 @@ public class CassandraSource extends AbstractSingleSplitSource<SeaTunnelRow> {
             this.rowTypeInfo = new SeaTunnelRowType(fieldNames, seaTunnelDataTypes);
         } catch (Exception e) {
             throw new CassandraConnectorException(CommonErrorCode.TABLE_SCHEMA_GET_FAILED,
-                    "Get table schema from cassandra source data failed , cql is " + CQL.key() , e);
+                    "Get table schema from cassandra source data failed , cql is " + CQL.key(), e);
         }
     }
 
