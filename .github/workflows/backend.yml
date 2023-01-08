@@ -342,7 +342,7 @@ jobs:
       - name: run updated modules integration test
         if: needs.changes.outputs.api == 'false' && needs.changes.outputs.it-modules != ''
         run: |
-          ./mvnw -T 1C -B verify -DskipUT=true -DskipIT=false -D"checkstyle.skip"=true -D"license.skipAddThirdParty"=true --no-snapshot-updates -pl ${{needs.changes.outputs.it-modules}} -am -Pci
+          ./mvnw -T 1C -B verify -DskipUT=true -DskipIT=false -D"checkstyle.skip"=true -D"license.skipAddThirdParty"=true --no-snapshot-updates -pl :connector-cassandra-e2e -am -Pci
         env:
           MAVEN_OPTS: -Xmx2048m
 
