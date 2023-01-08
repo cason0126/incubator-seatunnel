@@ -72,8 +72,9 @@ public class CassandraSource extends AbstractSingleSplitSource<SeaTunnelRow> {
                 pluginConfig.getString(KEYSPACE.key()),
                 cassandraParameters.getUsername(),
                 cassandraParameters.getPassword(),
-                cassandraParameters.getCql()
+                cassandraParameters.getDatacenter()
         ).build()) {
+            System.out.println(CQL.key() + "LEVEL is :" +cassandraParameters.getConsistencyLevel() );
             Row rs = currentSession.execute(
                     CassandraClient.createSimpleStatement(CQL.key(), cassandraParameters.getConsistencyLevel()
                     )
