@@ -40,6 +40,67 @@ jobs:
           submodules: true
       - name: Check license header
         uses: apache/skywalking-eyes@985866ce7e324454f61e22eb2db2e998db09d6f3
+  unit-test:
+    needs: [ changes, sanity-check ]
+    #  if: needs.changes.outputs.api == 'true' || (needs.changes.outputs.api == 'false' && needs.changes.outputs.ut-modules != '')
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        java: [ '8', '11' ]
+        os: [ 'ubuntu-latest', 'windows-latest' ]
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK ${{ matrix.java }}
+        uses: actions/setup-java@v3
+        with:
+          java-version: ${{ matrix.java }}
+          distribution: 'temurin'
+          cache: 'maven'
+      #      - name: run all modules unit test
+      #        if: needs.changes.outputs.api == 'true'
+      #        run: |
+      #          ./mvnw -B -T 1C clean verify -D"maven.test.skip"=false -D"checkstyle.skip"=true -D"license.skipAddThirdParty"=true --no-snapshot-updates
+      #        env:
+      #          MAVEN_OPTS: -Xmx2048m
+
+      - name: run updated modules unit test
+        #        if: needs.changes.outputs.api == 'false' && needs.changes.outputs.ut-modules != ''
+        run: |
+          ./mvnw -B -T 1C clean verify -D"maven.test.skip"=false -D"checkstyle.skip"=true -D"license.skipAddThirdParty"=true --no-snapshot-updates -pl :connector-cassandra,:connector-cassandra-e2e -am -Pci
+        env:
+          MAVEN_OPTS: -Xmx2048m
+
+  integration-test:
+    needs: [ changes, sanity-check ]
+    #    if: needs.changes.outputs.api == 'true' || (needs.changes.outputs.api == 'false' && needs.changes.outputs.it-modules != '')
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        java: [ '8', '11' ]
+        os: [ 'ubuntu-latest' ]
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK ${{ matrix.java }}
+        uses: actions/setup-java@v3
+        with:
+          java-version: ${{ matrix.java }}
+          distribution: 'temurin'
+          cache: 'maven'
+      #      - name: run all modules integration test
+      #        if: needs.changes.outputs.api == 'true'
+      #        run: |
+      #          ./mvnw -T 1C -B verify -DskipUT=true -DskipIT=false -D"checkstyle.skip"=true -D"license.skipAddThirdParty"=true --no-snapshot-updates
+      #        env:
+      #          MAVEN_OPTS: -Xmx2048m
+
+      - name: run updated modules integration test
+        #    if: needs.changes.outputs.api == 'false' && needs.changes.outputs.it-modules != ''
+        run: |
+          ./mvnw -T 1C -B verify -DskipUT=true -DskipIT=false -D"checkstyle.skip"=true -D"license.skipAddThirdParty"=true --no-snapshot-updates -pl :connector-cassandra-e2e -am -Pci
+        env:
+          MAVEN_OPTS: -Xmx2048m
 
   code-style:
     if: github.repository == 'cason0126/incubator-seatunnel'
@@ -284,65 +345,5 @@ jobs:
       - name: Check Dependencies Licenses
         run: tools/dependencies/checkLicense.sh
 
-  unit-test:
-    needs: [ changes, sanity-check ]
-  #  if: needs.changes.outputs.api == 'true' || (needs.changes.outputs.api == 'false' && needs.changes.outputs.ut-modules != '')
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        java: [ '8', '11' ]
-        os: [ 'ubuntu-latest', 'windows-latest' ]
-    timeout-minutes: 90
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set up JDK ${{ matrix.java }}
-        uses: actions/setup-java@v3
-        with:
-          java-version: ${{ matrix.java }}
-          distribution: 'temurin'
-          cache: 'maven'
-#      - name: run all modules unit test
-#        if: needs.changes.outputs.api == 'true'
-#        run: |
-#          ./mvnw -B -T 1C clean verify -D"maven.test.skip"=false -D"checkstyle.skip"=true -D"license.skipAddThirdParty"=true --no-snapshot-updates
-#        env:
-#          MAVEN_OPTS: -Xmx2048m
 
-      - name: run updated modules unit test
-#        if: needs.changes.outputs.api == 'false' && needs.changes.outputs.ut-modules != ''
-        run: |
-          ./mvnw -B -T 1C clean verify -D"maven.test.skip"=false -D"checkstyle.skip"=true -D"license.skipAddThirdParty"=true --no-snapshot-updates -pl :connector-cassandra,:connector-cassandra-e2e -am -Pci
-        env:
-          MAVEN_OPTS: -Xmx2048m
-
-  integration-test:
-    needs: [ changes, sanity-check ]
-#    if: needs.changes.outputs.api == 'true' || (needs.changes.outputs.api == 'false' && needs.changes.outputs.it-modules != '')
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        java: [ '8', '11' ]
-        os: [ 'ubuntu-latest' ]
-    timeout-minutes: 90
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set up JDK ${{ matrix.java }}
-        uses: actions/setup-java@v3
-        with:
-          java-version: ${{ matrix.java }}
-          distribution: 'temurin'
-          cache: 'maven'
-#      - name: run all modules integration test
-#        if: needs.changes.outputs.api == 'true'
-#        run: |
-#          ./mvnw -T 1C -B verify -DskipUT=true -DskipIT=false -D"checkstyle.skip"=true -D"license.skipAddThirdParty"=true --no-snapshot-updates
-#        env:
-#          MAVEN_OPTS: -Xmx2048m
-
-      - name: run updated modules integration test
-    #    if: needs.changes.outputs.api == 'false' && needs.changes.outputs.it-modules != ''
-        run: |
-          ./mvnw -T 1C -B verify -DskipUT=true -DskipIT=false -D"checkstyle.skip"=true -D"license.skipAddThirdParty"=true --no-snapshot-updates -pl :connector-cassandra-e2e -am -Pci
-        env:
-          MAVEN_OPTS: -Xmx2048m
 
