@@ -41,7 +41,7 @@ jobs:
       - name: Check license header
         uses: apache/skywalking-eyes@985866ce7e324454f61e22eb2db2e998db09d6f3
   unit-test:
-    needs: [ changes, sanity-check ]
+    # needs: [ changes, sanity-check ]
     #  if: needs.changes.outputs.api == 'true' || (needs.changes.outputs.api == 'false' && needs.changes.outputs.ut-modules != '')
     runs-on: ${{ matrix.os }}
     strategy:
@@ -72,7 +72,7 @@ jobs:
           MAVEN_OPTS: -Xmx2048m
 
   integration-test:
-    needs: [ changes, sanity-check ]
+    # needs: [ changes, sanity-check ]
     #    if: needs.changes.outputs.api == 'true' || (needs.changes.outputs.api == 'false' && needs.changes.outputs.it-modules != '')
     runs-on: ${{ matrix.os }}
     strategy:
